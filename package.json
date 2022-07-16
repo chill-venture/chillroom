@@ -1,0 +1,30 @@
+{
+    "name": "the-chill-room-firebase",
+    "version": "1.0.0",
+    "description": "Chill-room-firebase",
+    "main": "server.js",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thucngyyen/the-chill-room-firebase.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/thucngyyen/the-chill-room-firebase/issues"
+    },
+    "homepage": "https://github.com/thucngyyen/the-chill-room-firebase#readme",
+    "dependencies": {
+        "firebase": "^9.6.11",
+        "firebase-tools": "^1.2.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
+}
