@@ -6,23 +6,10 @@ import {
     getDatabase,
     ref,
     set,
-    child,
     push,
-    update,
     get,
     onChildAdded,
-    onChildChanged,
-    onChildRemoved,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    doc,
-    setDoc,
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -44,7 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 const db = getDatabase(app)
-// connectDatabaseEmulator(db, "localhost", 9000)
+connectDatabaseEmulator(db, "localhost", 9000)
 
 export const userName = prompt("What's your name?")
 
@@ -93,10 +80,7 @@ const userId = userRef.key
 async function createOffer() {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    let localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-    })
+    let localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     let remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
@@ -112,8 +96,6 @@ async function createOffer() {
 
     const iceOfferRef = ref(db, `${roomId}/users/${userId}/iceOffer`)
     const iceAnswerRef = ref(db, `${roomId}/users/${userId}/iceAnswer`)
-
-    const calleeIdsRef = ref(db, `${roomId}/users/${userId}/calleeIds`)
 
     pc.onicecandidate = (event) => {
         event.candidate && set(push(iceOfferRef), event.candidate.toJSON())
@@ -190,10 +172,7 @@ async function createOffer() {
 // 3. Create answer
 async function createAnswer(callerId, calleeId) {
     const pc = new RTCPeerConnection(servers)
-    let localStream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true,
-    })
+    let localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     const video = document.createElement("video")
     let remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
@@ -331,13 +310,13 @@ function audioAndVideoButtons(stream) {
     const muteButton = document.querySelector("#muteButton")
     muteButton.addEventListener("click", () => {
         let enabled = myVideoStream.getAudioTracks()[0].enabled
-        if (enabled) {
-            myVideoStream.getAudioTracks()[0].enabled = false
+        if (!enabled) {
+            myVideoStream.getAudioTracks()[0].enabled = true
             let html = `<i class="fas fa-microphone-slash"></i>`
             muteButton.classList.toggle("background__red")
             muteButton.innerHTML = html
         } else {
-            myVideoStream.getAudioTracks()[0].enabled = true
+            myVideoStream.getAudioTracks()[0].enabled = false
             let html = `<i class="fas fa-microphone"></i>`
             muteButton.classList.toggle("background__red")
             muteButton.innerHTML = html
