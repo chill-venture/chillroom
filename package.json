@@ -2,13 +2,14 @@
     "name": "the-chill-room-firebase",
     "version": "1.0.0",
     "description": "Chill-room-firebase",
-    "main": "server.js",
+    "main": "public/server.js",
     "directories": {
         "doc": "docs"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon"
+        "start": "nodemon ../public/server.js",
+        "build": "webpack --mode=development"
     },
     "repository": {
         "type": "git",
@@ -21,10 +22,12 @@
     },
     "homepage": "https://github.com/thucngyyen/the-chill-room-firebase#readme",
     "dependencies": {
-        "firebase": "^9.6.11",
-        "firebase-tools": "^1.2.0"
+        "firebase": "^9.9.0",
+        "firebase-tools": "^11.2.2"
     },
     "devDependencies": {
-        "nodemon": "^2.0.15"
+        "nodemon": "^2.0.15",
+        "webpack": "^5.73.0",
+        "webpack-cli": "^4.10.0"
     }
 }
