@@ -31,7 +31,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const analytics = getAnalytics(app)
 const db = getDatabase(app)
-connectDatabaseEmulator(db, "localhost", 9000)
+// connectDatabaseEmulator(db, "localhost", 9000)
 
 export const userName = prompt("What's your name?")
 
