@@ -9,7 +9,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon ../public/server.js",
-        "build": "webpack --mode=development"
+        "build_dev": "webpack --mode=development --watch",
+        "build": "webpack --mode=production"
     },
     "repository": {
         "type": "git",
