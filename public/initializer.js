@@ -128,20 +128,22 @@ function addVideoStream(localStream, remoteStream, video) {
     if (!myVideo.srcObject) {
         myVideo.srcObject = localStream
         myVideo.muted = true
-        myVideo.addEventListener("loadedmetadata", () => {
-            myVideo.play()
-        })
-        myVideo.classList.add("playsinline")
+        // myVideo.addEventListener("loadedmetadata", () => {
+        //     myVideo.play()
+        // })
+        myVideo.playsinline = true
+        myVideo.autoplay = true
         videoGrid.append(myVideo)
 
         audioAndVideoButtons(localStream)
     }
     // Add remote video
     video.srcObject = remoteStream
-    video.addEventListener("loadedmetadata", () => {
-        video.play()
-    })
-    myVideo.classList.add("playsinline")
+    // video.addEventListener("loadedmetadata", () => {
+    //     video.play()
+    // })
+    video.playsinline = true
+    video.autoplay = true
     videoGrid.append(video)
 }
 
