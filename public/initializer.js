@@ -131,6 +131,7 @@ function addVideoStream(localStream, remoteStream, video) {
         myVideo.addEventListener("loadedmetadata", () => {
             myVideo.play()
         })
+        myVideo.classList.add("playsinline")
         videoGrid.append(myVideo)
 
         audioAndVideoButtons(localStream)
@@ -140,6 +141,7 @@ function addVideoStream(localStream, remoteStream, video) {
     video.addEventListener("loadedmetadata", () => {
         video.play()
     })
+    myVideo.classList.add("playsinline")
     videoGrid.append(video)
 }
 
