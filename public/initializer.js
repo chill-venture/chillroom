@@ -123,16 +123,6 @@ function displayMessage(message) {
 }
 
 function addVideoStream(localStream, remoteStream, video) {
-    // Add local video
-    // if (!myVideo.srcObject) {
-    //     myVideo.srcObject = localStream
-    //     myVideo.muted = true
-    //     myVideo.setAttribute("playsinline", "")
-    //     myVideo.setAttribute("autoplay", "")
-    //     videoGrid.append(myVideo)
-
-    //     audioAndVideoButtons(localStream)
-    // }
     // Add remote video
     video.srcObject = remoteStream
     video.setAttribute("playsinline", "")
