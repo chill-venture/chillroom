@@ -12,6 +12,6 @@ module.exports = {
     // map the built code back to the original source format when debugging.
     devtool: "eval-source-map",
     experiments: {
-        topLevelAwait: false,
+        topLevelAwait: true,
     },
 }

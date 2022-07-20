@@ -140,10 +140,22 @@ function addVideoStream(localStream, remoteStream, video) {
     videoGrid.append(video)
 }
 
+const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+// Add local video
+if (!myVideo.srcObject) {
+    myVideo.srcObject = localStream
+    myVideo.muted = true
+    myVideo.setAttribute("playsinline", "")
+    myVideo.setAttribute("autoplay", "")
+    videoGrid.append(myVideo)
+
+    audioAndVideoButtons(localStream)
+}
+
 async function createOffer() {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+    // const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
@@ -152,17 +164,6 @@ async function createOffer() {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track)
         })
-    }
-
-    // Add local video
-    if (!myVideo.srcObject) {
-        myVideo.srcObject = localStream
-        myVideo.muted = true
-        myVideo.setAttribute("playsinline", "")
-        myVideo.setAttribute("autoplay", "")
-        videoGrid.append(myVideo)
-
-        audioAndVideoButtons(localStream)
     }
 
     // Create Data channel
@@ -245,7 +246,7 @@ async function createOffer() {
 async function createAnswer(callerId, calleeId) {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+    // const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
@@ -254,17 +255,6 @@ async function createAnswer(callerId, calleeId) {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track)
         })
-    }
-
-    // Add local video
-    if (!myVideo.srcObject) {
-        myVideo.srcObject = localStream
-        myVideo.muted = true
-        myVideo.setAttribute("playsinline", "")
-        myVideo.setAttribute("autoplay", "")
-        videoGrid.append(myVideo)
-
-        audioAndVideoButtons(localStream)
     }
 
     // Create data channel
