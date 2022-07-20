@@ -124,15 +124,15 @@ function displayMessage(message) {
 
 function addVideoStream(localStream, remoteStream, video) {
     // Add local video
-    if (!myVideo.srcObject) {
-        myVideo.srcObject = localStream
-        myVideo.muted = true
-        myVideo.setAttribute("playsinline", "")
-        myVideo.setAttribute("autoplay", "")
-        videoGrid.append(myVideo)
+    // if (!myVideo.srcObject) {
+    //     myVideo.srcObject = localStream
+    //     myVideo.muted = true
+    //     myVideo.setAttribute("playsinline", "")
+    //     myVideo.setAttribute("autoplay", "")
+    //     videoGrid.append(myVideo)
 
-        audioAndVideoButtons(localStream)
-    }
+    //     audioAndVideoButtons(localStream)
+    // }
     // Add remote video
     video.srcObject = remoteStream
     video.setAttribute("playsinline", "")
@@ -152,6 +152,17 @@ async function createOffer() {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track)
         })
+    }
+
+    // Add local video
+    if (!myVideo.srcObject) {
+        myVideo.srcObject = localStream
+        myVideo.muted = true
+        myVideo.setAttribute("playsinline", "")
+        myVideo.setAttribute("autoplay", "")
+        videoGrid.append(myVideo)
+
+        audioAndVideoButtons(localStream)
     }
 
     // Create Data channel
@@ -244,6 +255,18 @@ async function createAnswer(callerId, calleeId) {
             remoteStream.addTrack(track)
         })
     }
+
+    // Add local video
+    if (!myVideo.srcObject) {
+        myVideo.srcObject = localStream
+        myVideo.muted = true
+        myVideo.setAttribute("playsinline", "")
+        myVideo.setAttribute("autoplay", "")
+        videoGrid.append(myVideo)
+
+        audioAndVideoButtons(localStream)
+    }
+
     // Create data channel
     let channel = pc.createDataChannel("chat", {
         negotiated: true,
@@ -337,13 +360,13 @@ function audioAndVideoButtons(stream) {
     stopVideo.addEventListener("click", () => {
         let enabled = myVideoStream.getVideoTracks()[0].enabled
         if (enabled) {
-            myVideoStream.getVideoTracks()[0].enabled = true
+            myVideoStream.getVideoTracks()[0].enabled = false
             let html = `<i class="fas fa-video-slash"></i>`
             stopVideo.classList.toggle("background__red")
             stopVideo.innerHTML = html
         } else {
-            myVideoStream.getVideoTracks()[0].enabled = false
-            let html = `<i class="fas fa-video"></i>`
+            myVideoStream.getVideoTracks()[0].enabled = true
+            let html = `<i class="fa fa-video-camera"></i>`
             stopVideo.classList.toggle("background__red")
             stopVideo.innerHTML = html
         }
