@@ -72,7 +72,6 @@ const videoGrid = document.getElementById("video-grid")
 const myVideo = document.createElement("video")
 
 let channels = new Set()
-console.log(channels)
 
 let messages = document.querySelector(".messages")
 let text = document.querySelector("#chat_message")
@@ -127,9 +126,6 @@ function addVideoStream(localStream, remoteStream, video) {
     // Add local video
     if (!myVideo.srcObject) {
         myVideo.srcObject = localStream
-        // myVideo.addEventListener("loadedmetadata", () => {
-        //     myVideo.play()
-        // })
         myVideo.muted = true
         myVideo.setAttribute("playsinline", "")
         myVideo.setAttribute("autoplay", "")
@@ -139,9 +135,6 @@ function addVideoStream(localStream, remoteStream, video) {
     }
     // Add remote video
     video.srcObject = remoteStream
-    // video.addEventListener("loadedmetadata", () => {
-    //     video.play()
-    // })
     video.setAttribute("playsinline", "")
     video.setAttribute("autoplay", "")
     videoGrid.append(video)
@@ -150,8 +143,8 @@ function addVideoStream(localStream, remoteStream, video) {
 async function createOffer() {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    let localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
-    let remoteStream = new MediaStream()
+    const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+    const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
     })
@@ -167,9 +160,6 @@ async function createOffer() {
         id: 0,
     })
     channels.add(channel)
-    // channel.onopen = function (event) {
-    //     channel.send("Hi you!")
-    // }
     channel.onmessage = function (event) {
         displayMessage(event.data)
         // Scroll down to lastest message
@@ -244,8 +234,8 @@ async function createOffer() {
 async function createAnswer(callerId, calleeId) {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    let localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
-    let remoteStream = new MediaStream()
+    const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+    const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
     })
@@ -260,9 +250,6 @@ async function createAnswer(callerId, calleeId) {
         id: 0,
     })
     channels.add(channel)
-    // channel.onopen = function (event) {
-    //     channel.send("Hi you!")
-    // }
     channel.onmessage = function (event) {
         displayMessage(event.data)
         // Scroll down to lastest message
