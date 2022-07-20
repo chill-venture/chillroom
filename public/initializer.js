@@ -130,7 +130,7 @@ function addVideoStream(localStream, remoteStream, video) {
         // myVideo.addEventListener("loadedmetadata", () => {
         //     myVideo.play()
         // })
-        myVideo.setAttribute("muted", "")
+        myVideo.muted = true
         myVideo.setAttribute("playsinline", "")
         myVideo.setAttribute("autoplay", "")
         videoGrid.append(myVideo)
