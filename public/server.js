@@ -1,29 +1,13 @@
 import {
     peerConnection,
     peerDisconnect,
+    screenShare,
     roomId,
     userId,
 } from "./initializer.js"
 peerConnection()
 peerDisconnect()
-
-// const screenButton = document.getElementById("shareScreen")
-// const videoElem = document.createElement("video")
-// videoElem.muted = true
-// let screenId = "screen"
-// let screenSharing = false
-
-// screenButton.addEventListener("click", (event) => {
-//     if (!screenSharing) {
-//         navigator.mediaDevices
-//             .getDisplayMedia({
-//                 mediaOption,
-//             })
-//             .then((stream) => {})
-//     } else {
-//     }
-// })
-
+screenShare()
 /////////////////// ----------------- ///////////////////////
 /////////////////// Clickable buttons //////////////////////
 /////////////////// ----------------- /////////////////////
