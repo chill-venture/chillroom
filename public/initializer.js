@@ -296,7 +296,6 @@ async function createAnswer(localStream, callerId, calleeId) {
 
     pc.addEventListener("connectionstatechange", (event) => {
         if (pc.connectionState === "connected") {
-            console.log("Peers connected")
             if (calleeId != "screen") {
                 addVideoStream(localStream, remoteStream, video)
             }
@@ -304,7 +303,6 @@ async function createAnswer(localStream, callerId, calleeId) {
     })
     pc.oniceconnectionstatechange = function () {
         if (pc.iceConnectionState == "disconnected") {
-            console.log("Disconnected")
             video.remove()
             channels.delete(pc)
             // Remove disconnected user in DB
@@ -375,6 +373,7 @@ export function peerDisconnect() {
     window.addEventListener("beforeunload", async function (e) {
         // e.preventDefault()
         // e.returnValue = ""
+        console.log("Deleting user info")
         await set(ref(db, `${roomId}/users/${userId}`), {})
     })
 }
