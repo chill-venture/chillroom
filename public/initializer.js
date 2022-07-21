@@ -373,8 +373,8 @@ export async function peerConnection() {
 
 export function peerDisconnect() {
     window.addEventListener("beforeunload", async function (e) {
-        e.preventDefault()
-        e.returnValue = ""
+        // e.preventDefault()
+        // e.returnValue = ""
         await set(ref(db, `${roomId}/users/${userId}`), {})
     })
 }
