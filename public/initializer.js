@@ -26,7 +26,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getDatabase(app)
-// connectDatabaseEmulator(db, "localhost", 9000)
+connectDatabaseEmulator(db, "localhost", 9000)
 
 const userName = prompt("What's your name?")
 
@@ -109,8 +109,6 @@ function displayMessage(message) {
         sender += message[i]
     }
 
-    console.log(sender)
-
     messages.innerHTML =
         messages.innerHTML +
         `<div class="message">
@@ -123,16 +121,6 @@ function displayMessage(message) {
 }
 
 function addVideoStream(localStream, remoteStream, video) {
-    // Add local video
-    // if (!myVideo.srcObject) {
-    //     myVideo.srcObject = localStream
-    //     myVideo.muted = true
-    //     myVideo.setAttribute("playsinline", "")
-    //     myVideo.setAttribute("autoplay", "")
-    //     videoGrid.append(myVideo)
-
-    //     audioAndVideoButtons(localStream)
-    // }
     // Add remote video
     video.srcObject = remoteStream
     video.setAttribute("playsinline", "")
@@ -140,7 +128,7 @@ function addVideoStream(localStream, remoteStream, video) {
     videoGrid.append(video)
 }
 
-const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
+var localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
 // Add local video
 if (!myVideo.srcObject) {
     myVideo.srcObject = localStream
@@ -152,10 +140,9 @@ if (!myVideo.srcObject) {
     audioAndVideoButtons(localStream)
 }
 
-async function createOffer() {
+async function createOffer(localStream, callerId) {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    // const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
@@ -179,11 +166,11 @@ async function createOffer() {
         scroller.scrollTop = scroller.scrollHeight
     }
 
-    const offerRef = ref(db, `${roomId}/users/${userId}/offer`)
-    const answerRef = ref(db, `${roomId}/users/${userId}/answer`)
+    const offerRef = ref(db, `${roomId}/users/${callerId}/offer`)
+    const answerRef = ref(db, `${roomId}/users/${callerId}/answer`)
 
-    const iceOfferRef = ref(db, `${roomId}/users/${userId}/iceOffer`)
-    const iceAnswerRef = ref(db, `${roomId}/users/${userId}/iceAnswer`)
+    const iceOfferRef = ref(db, `${roomId}/users/${callerId}/iceOffer`)
+    const iceAnswerRef = ref(db, `${roomId}/users/${callerId}/iceAnswer`)
 
     pc.onicecandidate = (event) => {
         event.candidate && set(push(iceOfferRef), event.candidate.toJSON())
@@ -219,8 +206,9 @@ async function createOffer() {
 
     pc.addEventListener("connectionstatechange", (event) => {
         if (pc.connectionState === "connected") {
-            console.log("Peers connected")
-            addVideoStream(localStream, remoteStream, video)
+            if (callerId != "screen") {
+                addVideoStream(localStream, remoteStream, video)
+            }
 
             // Remove info about last connection: offer, asnwer,
             // iceOffer, iceAnswer
@@ -231,22 +219,20 @@ async function createOffer() {
             set(iceAnswerRef, {})
 
             // Create offer for new connection
-            createOffer()
+            createOffer(localStream, callerId)
         }
     })
     pc.oniceconnectionstatechange = function () {
         if (pc.iceConnectionState == "disconnected") {
-            console.log("Disconnected")
             video.remove()
             channels.delete(pc)
         }
     }
 }
 
-async function createAnswer(callerId, calleeId) {
+async function createAnswer(localStream, callerId, calleeId) {
     const pc = new RTCPeerConnection(servers)
     const video = document.createElement("video")
-    // const localStream = await navigator.mediaDevices.getUserMedia(mediaOption)
     const remoteStream = new MediaStream()
     localStream.getTracks().forEach((track) => {
         pc.addTrack(track, localStream)
@@ -311,7 +297,9 @@ async function createAnswer(callerId, calleeId) {
     pc.addEventListener("connectionstatechange", (event) => {
         if (pc.connectionState === "connected") {
             console.log("Peers connected")
-            addVideoStream(localStream, remoteStream, video)
+            if (calleeId != "screen") {
+                addVideoStream(localStream, remoteStream, video)
+            }
         }
     })
     pc.oniceconnectionstatechange = function () {
@@ -372,10 +360,10 @@ export async function peerConnection() {
                 for (var remoteUserId in users.val()) {
                     const remoteUser = users.val()[remoteUserId]
                     if (remoteUserId != userId) {
-                        createAnswer(remoteUserId, userId)
+                        createAnswer(localStream, remoteUserId, userId)
                     }
                 }
-                createOffer()
+                createOffer(localStream, userId)
             }
         })
         .catch((error) => {
@@ -388,6 +376,50 @@ export function peerDisconnect() {
         e.preventDefault()
         e.returnValue = ""
         await set(ref(db, `${roomId}/users/${userId}`), {})
+    })
+}
+
+var screenSharing = false
+export function screenShare() {
+    const screenButton = document.getElementById("shareScreen")
+    let screenId = "screen"
+    let screenStream = null
+    screenButton.addEventListener("click", async (event) => {
+        if (!screenSharing) {
+            screenStream = await navigator.mediaDevices.getDisplayMedia({
+                mediaOption,
+            })
+            await get(ref(db, `${roomId}/users`))
+                .then((users) => {
+                    if (!users.exists()) {
+                        console.error("Something went wrong!")
+                    } else {
+                        for (var remoteUserId in users.val()) {
+                            const remoteUser = users.val()[remoteUserId]
+                            if (remoteUserId != screenId) {
+                                createAnswer(
+                                    screenStream,
+                                    remoteUserId,
+                                    screenId
+                                )
+                            }
+                        }
+                        createOffer(screenStream, screenId)
+                    }
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+            screenSharing = true
+            screenButton.innerHTML =
+                '<i class="material-icons">stop_screen_share</i>'
+        } else {
+            screenStream.getTracks().forEach((track) => track.stop())
+            set(ref(db, `${roomId}/users/${screenId}`), {})
+            screenSharing = false
+            screenButton.innerHTML =
+                '<i class="material-icons">screen_share</i>'
+        }
     })
 }
 
