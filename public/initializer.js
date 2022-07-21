@@ -296,7 +296,6 @@ async function createAnswer(localStream, callerId, calleeId) {
 
     pc.addEventListener("connectionstatechange", (event) => {
         if (pc.connectionState === "connected") {
-            console.log("Peers connected")
             if (calleeId != "screen") {
                 addVideoStream(localStream, remoteStream, video)
             }
@@ -304,7 +303,6 @@ async function createAnswer(localStream, callerId, calleeId) {
     })
     pc.oniceconnectionstatechange = function () {
         if (pc.iceConnectionState == "disconnected") {
-            console.log("Disconnected")
             video.remove()
             channels.delete(pc)
             // Remove disconnected user in DB
@@ -372,10 +370,33 @@ export async function peerConnection() {
 }
 
 export function peerDisconnect() {
-    window.addEventListener("beforeunload", async function (e) {
-        e.preventDefault()
-        e.returnValue = ""
-        await set(ref(db, `${roomId}/users/${userId}`), {})
+    // window.addEventListener("beforeunload", async function (e) {
+    //     // e.preventDefault()
+    //     // e.returnValue = ""
+    //     await set(ref(db, `${roomId}/users/${userId}`), {})
+    // })
+
+    // subscribe to visibility change events
+    document.addEventListener("visibilitychange", async function () {
+        // fires when user switches tabs, apps, goes to homescreen, etc.
+        if (document.visibilityState == "hidden") {
+            function mobileCheck() {
+                return window.innerWidth <= 700
+            }
+            const isMobile = mobileCheck()
+            if (isMobile) {
+                console.log("MOBILE!")
+                await set(ref(db, `${roomId}/users/${userId}`), {})
+            } else {
+                window.addEventListener("beforeunload", async function (e) {
+                    await set(ref(db, `${roomId}/users/${userId}`), {})
+                })
+            }
+        }
+        // fires when app transitions from prerender, user returns to the app / tab.
+        if (document.visibilityState == "visible") {
+            console.log("Visible")
+        }
     })
 }
 

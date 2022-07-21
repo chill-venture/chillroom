@@ -1,10 +1,4 @@
-import {
-    peerConnection,
-    peerDisconnect,
-    screenShare,
-    roomId,
-    userId,
-} from "./initializer.js"
+import { peerConnection, peerDisconnect, screenShare } from "./initializer.js"
 peerConnection()
 peerDisconnect()
 screenShare()
