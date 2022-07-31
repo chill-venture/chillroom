@@ -1,12 +1,17 @@
+/////////////////// ----------------- ///////////////////////
+///////////////////  Peer connection  //////////////////////
+/////////////////// ----------------- /////////////////////
+
 import { peerConnection, peerDisconnect, screenShare } from "./initializer.js"
 peerConnection()
 peerDisconnect()
 screenShare()
+
 /////////////////// ----------------- ///////////////////////
 /////////////////// Clickable buttons //////////////////////
 /////////////////// ----------------- /////////////////////
 
-// Mobile Feature
+//*** Mobile Feature***
 // Show chat
 const showChat = document.querySelector("#showChat")
 const backBtn = document.querySelector(".header__back")
@@ -38,11 +43,11 @@ resizer()
 /////////////////// -------- ///////////////////////
 /////////////////// Shortcut //////////////////////
 /////////////////// -------- /////////////////////
-//  For better UI  \\
-
 /* 
     "/" to chat 
 */
 document.onkeyup = (keyUpEvent) => {
-    if (keyUpEvent.key == "/") text.focus()
+    if (keyUpEvent.key == "/") {
+        document.querySelector("#chat_message").focus()
+    }
 }

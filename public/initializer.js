@@ -370,12 +370,6 @@ export async function peerConnection() {
 }
 
 export function peerDisconnect() {
-    // window.addEventListener("beforeunload", async function (e) {
-    //     // e.preventDefault()
-    //     // e.returnValue = ""
-    //     await set(ref(db, `${roomId}/users/${userId}`), {})
-    // })
-
     // subscribe to visibility change events
     document.addEventListener("visibilitychange", async function () {
         // fires when user switches tabs, apps, goes to homescreen, etc.
@@ -385,17 +379,12 @@ export function peerDisconnect() {
             }
             const isMobile = mobileCheck()
             if (isMobile) {
-                console.log("MOBILE!")
                 await set(ref(db, `${roomId}/users/${userId}`), {})
             } else {
                 window.addEventListener("beforeunload", async function (e) {
                     await set(ref(db, `${roomId}/users/${userId}`), {})
                 })
             }
-        }
-        // fires when app transitions from prerender, user returns to the app / tab.
-        if (document.visibilityState == "visible") {
-            console.log("Visible")
         }
     })
 }
@@ -444,4 +433,4 @@ export function screenShare() {
     })
 }
 
-export { roomId, userId, userName, mediaOption }
+// export { roomId, userId, userName, mediaOption }
