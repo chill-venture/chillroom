@@ -1,6 +1,6 @@
 # [the-chill-room](https://da-chill-room.herokuapp.com)
 
-This project is created based on the curiosity as well as concern of a young engineer about the monetization of online applications. Intend to create a communication application that remains privacy for our users.
+This project is created based on the curiosity as well as concern of a young engineer about the monetization of current world. Intend to create a communication platform that protects privacy for our users.
 
 ## Introduction
 
