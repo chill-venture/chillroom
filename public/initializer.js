@@ -26,7 +26,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
 const db = getDatabase(app)
-connectDatabaseEmulator(db, "localhost", 9000)
+// connectDatabaseEmulator(db, "localhost", 9000)
 
 const userName = prompt("What's your name?")
 
