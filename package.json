@@ -24,7 +24,7 @@
     "homepage": "https://github.com/thucngyyen/the-chill-room-firebase#readme",
     "dependencies": {
         "firebase": "^9.9.0",
-        "firebase-tools": "^11.2.2"
+        "firebase-tools": "^11.16.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.15",
