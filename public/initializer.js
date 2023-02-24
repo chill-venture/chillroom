@@ -395,9 +395,9 @@ export function screenShare() {
     let screenStream = null
     screenButton.addEventListener("click", async (event) => {
         if (!screenSharing) {
-            screenStream = await navigator.mediaDevices.getDisplayMedia({
-                mediaOption,
-            })
+            screenStream = await navigator.mediaDevices.getDisplayMedia(
+                mediaOption
+            )
             await get(ref(db, `${roomId}/users`))
                 .then((users) => {
                     if (!users.exists()) {
