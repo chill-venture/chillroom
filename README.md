@@ -13,7 +13,7 @@ The-chill-room is a zoom-like app that provides the high-quality, real-time vide
 
 We **deployed** on Heroku so you can enjoy it
 
-- Make your **digital life** better [here](https://da-chill-room.herokuapp.com) :metal::sunglasses:🎉
+- Make your **digital life** better [here](https://chillroom.live/) :metal::sunglasses:🎉
 - Don't forget to share it with your friends
 
 ## Install and Run on local environment
